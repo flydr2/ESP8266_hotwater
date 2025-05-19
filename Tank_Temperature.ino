@@ -4,19 +4,19 @@
  * 
  * The heater will go to the set temperature (Make sure the sensor has a good contact with the tank) and keep it until timeout.
  *
- *
+ * uncomment heaterOn = false; if you want it to switch OFF and stay OFF after it reached temperture
  *
  */
 
-#include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h> // 1st make sure you're not on esp32 board
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
 // Network credentials
-const char* ssid = "examplessid";
-const char* password = "examplepassword";
+const char* ssid = "Sailrover2G";
+const char* password = "robitaille";
 
 // Pin definitions
 const int switch1 = 2;  // D4 NodeMCU Active LOW (changed from D5) This is the n/o relay
@@ -127,6 +127,22 @@ void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventTyp
     Serial.println("WebSocket client disconnected");
   }
 }
+void reconnect(){
+  // Connect to Wi-Fi
+  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+    Serial.println("STA Failed to configure");
+  }
+  WiFi.begin(ssid, password);
+  if (WiFi.status() != WL_CONNECTED) {
+    digitalWrite(switch1, LOW);
+    heaterOn = false; // Ensure heater stays off
+    tankStatus = "APAGADOS";
+    delay(5000);
+    Serial.println("Connecting to WiFi..");
+  }
+  Serial.println(WiFi.localIP());
+  
+}
 
 void setup() {
   Serial.begin(115200);
@@ -199,7 +215,7 @@ void loop() {
     else if (currentTemp >= setpointTemp.toFloat()) {
       digitalWrite(switch1, LOW); // Heater OFF
       tankStatus = "APAGADOS";
-     // heaterOn = false; // Ensure heater stays off
+     // heaterOn = false; // Ensure heater stays off  //uncomment to save energy and not use the total of the TIMEOUT
     } else {
       digitalWrite(switch1, HIGH); // Heater ON
       tankStatus = "CALENTANDO";
@@ -239,5 +255,8 @@ void loop() {
     Serial.print(tankStatus);
     Serial.print(", Timer: ");
     Serial.println(timerStr);
+  }
+  if (WiFi.status() != WL_CONNECTED) {
+    reconnect();
   }
 }
