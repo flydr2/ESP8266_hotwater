@@ -127,22 +127,7 @@ void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventTyp
     Serial.println("WebSocket client disconnected");
   }
 }
-void reconnect(){
-  // Connect to Wi-Fi
-  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
-    Serial.println("STA Failed to configure");
-  }
-  WiFi.begin(ssid, password);
-  if (WiFi.status() != WL_CONNECTED) {
-    digitalWrite(switch1, LOW);
-    heaterOn = false; // Ensure heater stays off
-    tankStatus = "APAGADOS";
-    delay(5000);
-    Serial.println("Connecting to WiFi..");
-  }
-  Serial.println(WiFi.localIP());
-  
-}
+
 
 void setup() {
   Serial.begin(115200);
@@ -256,7 +241,5 @@ void loop() {
     Serial.print(", Timer: ");
     Serial.println(timerStr);
   }
-  if (WiFi.status() != WL_CONNECTED) {
-    reconnect();
-  }
+
 }
