@@ -70,7 +70,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   <h2>Calientador</h2>
   <p>Temp. Presente: <span id="currentTemp">0</span> C</p>
   <p>Temp. Quiero: <span id="textSliderValue">%SETPOINTTEMP%</span> C</p>
-  <p><input type="range" onchange="updateSlider(this)" id="tempSlider" min="20" max="39" value="%SETPOINTTEMP%" step="1" class="slider"></p>
+  <p><input type="range" onchange="updateSlider(this)" id="tempSlider" min="28" max="39" value="%SETPOINTTEMP%" step="1" class="slider"></p>
   <p>Status: <span id="tankStatus">%TANKSTATUS%</span></p>
   <p>Queda Tiempo: <span id="timeRemaining">--:--</span></p>
   <p><button id="controlButton" class="button button-off" onclick="toggleHeater()">Start</button></p>
