@@ -15,8 +15,8 @@
 #include <DallasTemperature.h>
 
 // Network credentials
-const char* ssid = "Sailrover2G";
-const char* password = "robitaille";
+const char* ssid = "My_SSID";
+const char* password = "My_Password";
 
 // Pin definitions
 const int switch1 = 2;  // D4 NodeMCU Active LOW (changed from D5) This is the n/o relay
